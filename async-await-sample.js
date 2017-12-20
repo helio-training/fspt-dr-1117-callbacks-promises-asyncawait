@@ -71,3 +71,20 @@ const runSyncAsAsync = async () => {
 
 console.log("runSyncAsAsync.....")
 runSyncAsAsync()
+
+const work = async () => {
+    const response = await fetch("https://swapi.co/api/people/1")
+    const result = await response.json()
+    console.log(result)
+    console.log("name", result.name)
+}
+
+const workOriginal = () => {
+    fetch("https://swapi.co/api/people/1")
+        .then((response) => {
+            return response.json()
+        }).then((result) => {
+            console.log(result)
+            console.log("name", result.name)
+        })
+}
