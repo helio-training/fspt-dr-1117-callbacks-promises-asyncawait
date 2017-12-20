@@ -1,29 +1,36 @@
-let computeSalary = (person, callback) => {
-   if(person.isGood){
-     callback(65000)
-   }
-   else {
-    callback(25000)
+const computeSalary = (person, callback) => {
+  try{
+    if(person.isGood){
+      callback(65000, undefined)
+    } else {
+      callback(25000, undefined)
+    }
+  } catch (e) {
+    callback(null, "error")  
   }
 }
 
-let theCallback = (myValue) => {
-  if(myValue > 25000){
-    console.log('yay!!!!')
-  }
-  else {
-    console.log('awwwwwww, at least I am a cat and do not hold any monetary standards. :3')
+const reportSalary = (myValue, err) => {
+  if (err) {
+    //log the error, do something about the error
+  } else {
+    if(myValue > 25000){
+      console.log('yay!!!!')
+    }
+    else {
+      console.log('awwwwwww, at least I am a cat and do not hold any monetary standards. :3')
+    }
   }
 }
+const somePerson = { name: 'Cat', isGood: false }
+computeSalary(somePerson, reportSalary)
 
-const a = theCallback        //no parens = pass function
+
+
+const a = reportSalary        //no parens = pass function
 a(2344353454)
-const b = theCallback(435)   //parens    = pass result of funciton
+const b = reportSalary(435)   //parens    = pass result of funciton
 
-computeSalary({
-  name: 'Cat',
-  isGood: false
-}, theCallback)
 
 console.log(1)
 console.log(2)

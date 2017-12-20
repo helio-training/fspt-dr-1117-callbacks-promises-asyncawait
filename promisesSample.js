@@ -1,42 +1,76 @@
+let count = 1
 const executor = (resolve, reject) => {
     console.log("Doing some work....")
-    if (false)
-        resolve("All done!")
+    if (count % 2)
+        resolve("All done!" + count)
     else
-        reject("Big failure...")
+        reject("Big failure..." + count)
+    count++
 }
 
-const promise = new Promise(executor)
+console.log("Running Promises.......")
+const promise1 = new Promise(executor)
 
-promise.then((result) => {
-    console.log(result)
+promise1.then((value) => {
+    console.log("then", value)
+    return new Promise(executor)
+}).then((value) => {
+    console.log("then", value)
+    return new Promise(executor)
+}).then((value) => {
+    console.log("then", value)
 }).catch((reason) => {
-    console.log(reason)
+    console.log("catch", reason)
+    return new Promise(executor)
+}).then((value) =>{
+    console.log("then", value + "this was follow-up from the catch")
+}).catch((reason) => {
+    console.log("catch", reason)
 })
 
 /////////////////////////////////////
 
+let countCallback = 0
 const doSomeWork = (callback) => {
     console.log("Doing some work...")
-    callback(false ? "All Done" : null, false ? null : "Big Failure")
+    countCallback++
+    if (countCallback % 2){
+        callback("All Done" + countCallback)
+    } else {
+        callback(null, "Big Failure" + countCallback)
+    }
 }
 
 const doSomeWorkCallback = (result, err) => {
-    if (result)
-        success(result)
     if (err)
         handleError(err)
+    if (result)
+        success(result)
 }
 
 const success = (result) => {
-    console.log(result)
+    console.log("success", result)
 }
 
 const handleError = (err) => {
-    console.log(err)
+    console.log("error", err)
 }
 
-
+console.log("Running Callbacks......")
+doSomeWork((result, err) => {
+    doSomeWorkCallback(result, err)
+    if (result)
+        doSomeWork((result, err) => {
+            doSomeWorkCallback(result, err)
+            if (result)
+                doSomeWork(doSomeWorkCallback)
+            else
+                doSomeWork((result, err) => {
+                    doSomeWorkCallback(result + "this was follow-up from the error", err)
+                })
+        
+        })
+})
 
 //promise()
 
